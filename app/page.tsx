@@ -5,6 +5,7 @@ import { getQueue, getAnalyses, getStats } from '@/lib/api'
 import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
 import SignOutButton from './SignOutButton'
+import Thumbnail from './components/Thumbnail'
 
 const STATUS_COLORS: Record<string, string> = {
   pending:  'bg-yellow-900/40 text-yellow-300',
@@ -111,6 +112,7 @@ export default async function BreweryPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-ale-border text-ale-muted text-xs uppercase tracking-wider">
+                    <th className="px-4 py-3 w-10"></th>
                     <th className="text-left px-4 py-3">URL</th>
                     <th className="text-left px-4 py-3">AI Score</th>
                     <th className="text-left px-4 py-3">Submitted</th>
@@ -121,6 +123,9 @@ export default async function BreweryPage() {
                 <tbody>
                   {queue.map((item) => (
                     <tr key={item.id} className="border-b border-ale-border last:border-0 hover:bg-ale-amber/5 transition-colors">
+                      <td className="px-4 py-3">
+                        <Thumbnail url={item.url} videoId={item.videoId} />
+                      </td>
                       <td className="px-4 py-3 max-w-xs">
                         <a
                           href={item.url}
@@ -176,6 +181,7 @@ export default async function BreweryPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-ale-border text-ale-muted text-xs uppercase tracking-wider">
+                    <th className="px-4 py-3 w-10"></th>
                     <th className="text-left px-4 py-3">URL</th>
                     <th className="text-left px-4 py-3">Score</th>
                     <th className="text-left px-4 py-3">AI</th>
@@ -191,6 +197,9 @@ export default async function BreweryPage() {
                     const review  = scan.review
                     return (
                       <tr key={scan.id} className="border-b border-ale-border last:border-0 hover:bg-ale-amber/5 transition-colors">
+                        <td className="px-4 py-3">
+                          <Thumbnail url={scan.url} videoId={scan.videoId} />
+                        </td>
                         <td className="px-4 py-3 max-w-xs">
                           <a
                             href={scan.url}
