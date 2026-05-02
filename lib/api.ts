@@ -1,4 +1,10 @@
 const API_URL = process.env.ALE_API_URL ?? 'http://localhost:8000'
+const API_KEY = process.env.ALE_API_KEY ?? ''
+
+const headers = () => ({
+  'Content-Type': 'application/json',
+  'X-API-Key': API_KEY,
+})
 
 export interface Analysis {
   id: string
@@ -68,26 +74,26 @@ function toAnalysis(r: any): Analysis {
 }
 
 export async function getQueue(status: string): Promise<QueueItem[]> {
-  const res = await fetch(`${API_URL}/queue?status=${status}`, { cache: 'no-store' })
+  const res = await fetch(`${API_URL}/queue?status=${status}`, { cache: 'no-store', headers: headers() })
   if (!res.ok) throw new Error(`GET /queue?status=${status} → ${res.status}`)
   return (await res.json()).map(toQueueItem)
 }
 
 export async function getQueueItem(id: string): Promise<QueueItem | null> {
-  const res = await fetch(`${API_URL}/queue/${id}`, { cache: 'no-store' })
+  const res = await fetch(`${API_URL}/queue/${id}`, { cache: 'no-store', headers: headers() })
   if (res.status === 404) return null
   if (!res.ok) throw new Error(`GET /queue/${id} → ${res.status}`)
   return toQueueItem(await res.json())
 }
 
 export async function getAnalyses(limit = 100): Promise<Analysis[]> {
-  const res = await fetch(`${API_URL}/analyses?limit=${limit}`, { cache: 'no-store' })
+  const res = await fetch(`${API_URL}/analyses?limit=${limit}`, { cache: 'no-store', headers: headers() })
   if (!res.ok) throw new Error(`GET /analyses → ${res.status}`)
   return (await res.json()).map(toAnalysis)
 }
 
 export async function getStats(): Promise<Stats> {
-  const res = await fetch(`${API_URL}/stats`, { cache: 'no-store' })
+  const res = await fetch(`${API_URL}/stats`, { cache: 'no-store', headers: headers() })
   if (!res.ok) throw new Error(`GET /stats → ${res.status}`)
   const r = await res.json()
   return {
@@ -100,7 +106,7 @@ export async function getStats(): Promise<Stats> {
 export async function patchQueueItem(id: string, status: string, notes?: string): Promise<void> {
   const res = await fetch(`${API_URL}/queue/${id}`, {
     method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers(),
     body: JSON.stringify({ status, notes: notes ?? null }),
   })
   if (!res.ok) throw new Error(`PATCH /queue/${id} → ${res.status}`)
