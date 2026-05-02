@@ -1,6 +1,7 @@
 import { getAnalyses } from '@/lib/api'
 import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
+import Thumbnail from '@/app/components/Thumbnail'
 
 const STATUS_COLORS: Record<string, string> = {
   verified: 'bg-emerald-900/40 text-emerald-300',
@@ -75,6 +76,7 @@ export default async function ScansPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-ale-border text-ale-muted text-xs uppercase tracking-wider">
+                  <th className="px-4 py-3 w-10"></th>
                   <th className="text-left px-4 py-3">URL</th>
                   <th className="text-left px-4 py-3">Score</th>
                   <th className="text-left px-4 py-3">AI</th>
@@ -90,6 +92,9 @@ export default async function ScansPage() {
                   const review  = scan.review
                   return (
                     <tr key={scan.id} className="border-b border-ale-border last:border-0 hover:bg-ale-amber/5 transition-colors">
+                      <td className="px-4 py-3">
+                        <Thumbnail url={scan.url} videoId={scan.videoId} />
+                      </td>
                       <td className="px-4 py-3 max-w-xs">
                         <a
                           href={scan.url}
