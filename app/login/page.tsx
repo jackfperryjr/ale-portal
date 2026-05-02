@@ -9,7 +9,7 @@ export default async function LoginPage({
   searchParams: { error?: string }
 }) {
   const session = await getServerSession(authOptions)
-  if (session) redirect('/brewery')
+  if (session) redirect('/')
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-6">

@@ -7,5 +7,5 @@ export default process.env.SKIP_AUTH === 'true'
   : withAuth({ pages: { signIn: '/login' } })
 
 export const config = {
-  matcher: ['/brewery/:path*'],
+  matcher: ['/', '/review/:path*'],
 }
