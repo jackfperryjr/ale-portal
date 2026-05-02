@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { getQueue, getAnalyses, getStats } from '@/lib/api'
@@ -43,6 +44,7 @@ function truncate(url: string, n = 52) {
 
 export default async function BreweryPage() {
   const session = await getServerSession(authOptions)
+  if (!session && process.env.SKIP_AUTH !== 'true') redirect('/login')
 
   const [pending, reviewing, recentScans, stats] = await Promise.all([
     getQueue('pending'),
