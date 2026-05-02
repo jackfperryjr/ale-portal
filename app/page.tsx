@@ -42,6 +42,46 @@ function truncate(url: string, n = 52) {
   }
 }
 
+function Thumbnail({ url, videoId }: { url: string; videoId: string | null }) {
+  const isYouTube = videoId && (url.includes('youtube.com') || url.includes('youtu.be'))
+  const isImage   = !isYouTube && /\.(jpe?g|png|gif|webp|avif)(\?|$)/i.test(url)
+
+  if (isYouTube) {
+    return (
+      <div className="w-16 h-9 rounded overflow-hidden bg-ale-border flex-shrink-0">
+        <img
+          src={`https://img.youtube.com/vi/${videoId}/mqdefault.jpg`}
+          alt=""
+          className="w-full h-full object-cover"
+        />
+      </div>
+    )
+  }
+
+  if (isImage) {
+    return (
+      <div className="w-9 h-9 rounded overflow-hidden bg-ale-border flex-shrink-0">
+        <img src={url} alt="" className="w-full h-full object-cover" />
+      </div>
+    )
+  }
+
+  try {
+    const { hostname } = new URL(url)
+    return (
+      <div className="w-9 h-9 rounded bg-ale-border flex items-center justify-center flex-shrink-0">
+        <img
+          src={`https://www.google.com/s2/favicons?domain=${hostname}&sz=32`}
+          alt=""
+          className="w-4 h-4 opacity-50"
+        />
+      </div>
+    )
+  } catch {
+    return <div className="w-9 h-9 rounded bg-ale-border flex-shrink-0" />
+  }
+}
+
 export default async function BreweryPage() {
   const session = await getServerSession(authOptions)
   if (!session && process.env.SKIP_AUTH !== 'true') redirect('/login')
@@ -111,6 +151,7 @@ export default async function BreweryPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-ale-border text-ale-muted text-xs uppercase tracking-wider">
+                    <th className="px-4 py-3 w-10"></th>
                     <th className="text-left px-4 py-3">URL</th>
                     <th className="text-left px-4 py-3">AI Score</th>
                     <th className="text-left px-4 py-3">Submitted</th>
@@ -121,6 +162,9 @@ export default async function BreweryPage() {
                 <tbody>
                   {queue.map((item) => (
                     <tr key={item.id} className="border-b border-ale-border last:border-0 hover:bg-ale-amber/5 transition-colors">
+                      <td className="px-4 py-3">
+                        <Thumbnail url={item.url} videoId={item.videoId} />
+                      </td>
                       <td className="px-4 py-3 max-w-xs">
                         <a
                           href={item.url}
@@ -176,6 +220,7 @@ export default async function BreweryPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-ale-border text-ale-muted text-xs uppercase tracking-wider">
+                    <th className="px-4 py-3 w-10"></th>
                     <th className="text-left px-4 py-3">URL</th>
                     <th className="text-left px-4 py-3">Score</th>
                     <th className="text-left px-4 py-3">AI</th>
@@ -191,6 +236,9 @@ export default async function BreweryPage() {
                     const review  = scan.review
                     return (
                       <tr key={scan.id} className="border-b border-ale-border last:border-0 hover:bg-ale-amber/5 transition-colors">
+                        <td className="px-4 py-3">
+                          <Thumbnail url={scan.url} videoId={scan.videoId} />
+                        </td>
                         <td className="px-4 py-3 max-w-xs">
                           <a
                             href={scan.url}
