@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/db'
+import { getAnalyses } from '@/lib/api'
 import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
 
@@ -35,17 +35,7 @@ function truncate(url: string, n = 52) {
 }
 
 export default async function ScansPage() {
-  const scans = await prisma.analysis.findMany({
-    orderBy: { createdAt: 'desc' },
-    take: 100,
-    include: {
-      queueItems: {
-        where: { status: { in: ['verified', 'rejected'] } },
-        orderBy: { updatedAt: 'desc' },
-        take: 1,
-      },
-    },
-  })
+  const scans = await getAnalyses(100)
 
   return (
     <div className="min-h-screen bg-ale-bg">
@@ -96,8 +86,8 @@ export default async function ScansPage() {
               </thead>
               <tbody>
                 {scans.map((scan) => {
-                  const details = (scan.rawResult as any)?.details ?? {}
-                  const review  = scan.queueItems[0] ?? null
+                  const details = scan.rawResult?.details ?? {}
+                  const review  = scan.review
                   return (
                     <tr key={scan.id} className="border-b border-ale-border last:border-0 hover:bg-ale-amber/5 transition-colors">
                       <td className="px-4 py-3 max-w-xs">

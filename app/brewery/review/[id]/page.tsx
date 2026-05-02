@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { prisma } from '@/lib/db'
+import { getQueueItem } from '@/lib/api'
 import { formatDistanceToNow } from 'date-fns'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
@@ -99,10 +99,7 @@ function getThumbnailUrl(url: string, videoId: string | null): string | null {
 
 export default async function ReviewPage({ params }: { params: { id: string } }) {
   const [item, session] = await Promise.all([
-    prisma.brewmasterQueue.findUnique({
-      where: { id: params.id },
-      include: { analysis: true },
-    }),
+    getQueueItem(params.id),
     getServerSession(authOptions),
   ])
 
@@ -114,7 +111,7 @@ export default async function ReviewPage({ params }: { params: { id: string } })
     item.status = 'brewing'
   }
 
-  const details  = (item.analysis?.rawResult as any)?.details ?? {}
+  const details  = item.analysis?.rawResult?.details ?? {}
   const thumb    = getThumbnailUrl(item.url, item.videoId)
 
   let hostname = item.url
@@ -196,9 +193,9 @@ export default async function ReviewPage({ params }: { params: { id: string } })
             {Object.values(details).some((v) => v != null) && (
               <div className="space-y-4 pt-2 border-t border-ale-border">
                 <p className="text-xs uppercase tracking-wider text-ale-muted">Hive Signals</p>
-                <SignalBar label="Not AI Generated"    value={details.not_ai_generated}    danger={false} />
-                <SignalBar label="AI Generated"        value={details.ai_generated}         danger={true}  />
-                <SignalBar label="Deepfake (visual)"   value={details.deepfake}             danger={true}  />
+                <SignalBar label="Not AI Generated"    value={details.not_ai_generated ?? null}    danger={false} />
+                <SignalBar label="AI Generated"        value={details.ai_generated ?? null}         danger={true}  />
+                <SignalBar label="Deepfake (visual)"   value={details.deepfake ?? null}             danger={true}  />
                 {details.ai_generated_audio != null && (
                   <SignalBar label="AI Generated (audio)" value={details.ai_generated_audio} danger={true} />
                 )}
