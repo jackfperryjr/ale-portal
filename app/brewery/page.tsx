@@ -1,6 +1,6 @@
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { getQueue, getAnalyses, getStats } from '@/lib/api'
 import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
 import SignOutButton from './SignOutButton'
@@ -45,35 +45,13 @@ export default async function BreweryPage() {
   const session = await getServerSession(authOptions)
 
   const [pending, reviewing, recentScans, stats] = await Promise.all([
-    prisma.brewmasterQueue.findMany({
-      where: { status: 'pending' },
-      include: { analysis: true },
-      orderBy: { createdAt: 'asc' },
-    }),
-    prisma.brewmasterQueue.findMany({
-      where: { status: 'brewing' },
-      include: { analysis: true },
-      orderBy: { updatedAt: 'desc' },
-    }),
-    prisma.analysis.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 20,
-      include: {
-        queueItems: {
-          where: { status: { in: ['verified', 'rejected'] } },
-          orderBy: { updatedAt: 'desc' },
-          take: 1,
-        },
-      },
-    }),
-    prisma.$transaction([
-      prisma.brewmasterQueue.count({ where: { status: { in: ['pending', 'reviewing'] } } }),
-      prisma.brewmasterQueue.count({ where: { status: 'verified' } }),
-      prisma.analysis.count(),
-    ]),
+    getQueue('pending'),
+    getQueue('brewing'),
+    getAnalyses(20),
+    getStats(),
   ])
 
-  const [pendingCount, verifiedCount, totalAnalyses] = stats
+  const { queuePending: pendingCount, queueVerified: verifiedCount, totalAnalyses } = stats
   const queue = [...reviewing, ...pending]
 
   return (
@@ -211,8 +189,8 @@ export default async function BreweryPage() {
                 </thead>
                 <tbody>
                   {recentScans.map((scan) => {
-                    const details = (scan.rawResult as any)?.details ?? {}
-                    const review  = scan.queueItems[0] ?? null
+                    const details = scan.rawResult?.details ?? {}
+                    const review  = scan.review
                     return (
                       <tr key={scan.id} className="border-b border-ale-border last:border-0 hover:bg-ale-amber/5 transition-colors">
                         <td className="px-4 py-3 max-w-xs">
