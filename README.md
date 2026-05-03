@@ -1,6 +1,14 @@
 # ALE Portal — The Brewery
 
-Next.js admin dashboard for reviewing AI-flagged video content and managing the human notarization queue.
+Admin dashboard for reviewing AI-flagged video content and managing the human review queue.
+
+<p align="center">
+  <img src="https://github.com/jackfperryjr/ale-portal/actions/workflows/deploy.yml/badge.svg" alt="Build Status" height="20">
+  <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/NextAuth.js-000000?style=flat-square&logo=nextauthdotjs&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" />
+  <img src="https://img.shields.io/badge/Prisma-2D3748?style=flat-square&logo=prisma&logoColor=white" />
+</p>
 
 ---
 
@@ -8,7 +16,7 @@ Next.js admin dashboard for reviewing AI-flagged video content and managing the 
 
 Authenticated brewmasters sign in via Google OAuth and land on the Brewery dashboard, which shows two views side by side: items pending human review and the most recent AI scan results. Each queue item can be opened for a full review — including Hive AI signal scores, a notes field, and buttons to mark the content as genuine or synthetic. A public `/scans` feed is available without auth.
 
-**Status lifecycle:** `pending` → `brewing` → `verified` / `rejected`
+**Status lifecycle:** `pending` → `brewing` → `genuine` / `synthetic`
 
 ---
 
@@ -43,80 +51,6 @@ ale-portal/
 ├── tailwind.config.ts
 └── package.json
 ```
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- A PostgreSQL database (Neon recommended)
-- A Google OAuth app
-
-### Setup
-
-```bash
-npm install
-```
-
-Create `.env`:
-
-```env
-DATABASE_URL=postgresql://user:password@host/dbname
-
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_nextauth_secret
-
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-# Comma-separated list of emails allowed to access The Brewery
-BREWERY_ALLOWED_EMAILS=you@example.com
-
-# Set to "true" to skip auth entirely (local dev only)
-SKIP_AUTH=false
-```
-
-Sync the Prisma schema:
-
-```bash
-npm run db:push
-```
-
-Start the dev server:
-
-```bash
-npm run dev
-```
-
-The Brewery will be available at `http://localhost:3000/brewery`.
-
----
-
-## Scripts
-
-| Command           | Description                        |
-|-------------------|------------------------------------|
-| `npm run dev`     | Start dev server                   |
-| `npm run build`   | Production build                   |
-| `npm run start`   | Start production server            |
-| `npm run db:push` | Push Prisma schema to the database |
-| `npm run db:studio` | Open Prisma Studio               |
-
----
-
-## Environment Variables
-
-| Variable                 | Required | Description                                         |
-|--------------------------|----------|-----------------------------------------------------|
-| `DATABASE_URL`           | Yes      | PostgreSQL connection string                        |
-| `NEXTAUTH_URL`           | Yes      | Public base URL of the portal                       |
-| `NEXTAUTH_SECRET`        | Yes      | Random secret for session signing                   |
-| `GOOGLE_CLIENT_ID`       | Yes      | Google OAuth app client ID                          |
-| `GOOGLE_CLIENT_SECRET`   | Yes      | Google OAuth app client secret                      |
-| `BREWERY_ALLOWED_EMAILS` | Yes      | Comma-separated list of emails permitted to sign in |
-| `SKIP_AUTH`              | No       | Set to `true` to bypass auth (development only)     |
 
 ---
 
