@@ -115,7 +115,7 @@ export default async function BreweryPage() {
                     <th className="px-4 py-3 w-10"></th>
                     <th className="text-left px-4 py-3">URL</th>
                     <th className="text-left px-4 py-3">AI Score</th>
-                    <th className="text-left px-4 py-3">Submitted</th>
+                    <th className="text-left px-4 py-3 hidden sm:table-cell">Submitted</th>
                     <th className="text-left px-4 py-3">Status</th>
                     <th className="px-4 py-3"></th>
                   </tr>
@@ -140,7 +140,7 @@ export default async function BreweryPage() {
                       <td className="px-4 py-3">
                         <ScoreBadge score={item.analysis?.realityScore ?? null} />
                       </td>
-                      <td className="px-4 py-3 text-ale-muted text-xs">
+                      <td className="px-4 py-3 text-ale-muted text-xs hidden sm:table-cell">
                         {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}
                       </td>
                       <td className="px-4 py-3">
@@ -184,11 +184,11 @@ export default async function BreweryPage() {
                     <th className="px-4 py-3 w-10"></th>
                     <th className="text-left px-4 py-3">URL</th>
                     <th className="text-left px-4 py-3">Score</th>
-                    <th className="text-left px-4 py-3">AI</th>
-                    <th className="text-left px-4 py-3">Deepfake</th>
-                    <th className="text-left px-4 py-3">Verification</th>
-                    <th className="text-left px-4 py-3">Notes</th>
-                    <th className="text-left px-4 py-3">Scanned</th>
+                    <th className="text-left px-4 py-3 hidden sm:table-cell">AI</th>
+                    <th className="text-left px-4 py-3 hidden sm:table-cell">Deepfake</th>
+                    <th className="text-left px-4 py-3 hidden md:table-cell">Verification</th>
+                    <th className="text-left px-4 py-3 hidden md:table-cell">Notes</th>
+                    <th className="text-left px-4 py-3 hidden sm:table-cell">Scanned</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -214,17 +214,17 @@ export default async function BreweryPage() {
                         <td className="px-4 py-3">
                           <ScoreBadge score={scan.realityScore} />
                         </td>
-                        <td className="px-4 py-3 text-ale-muted tabular-nums text-xs">
+                        <td className="px-4 py-3 text-ale-muted tabular-nums text-xs hidden sm:table-cell">
                           {details.ai_generated != null
                             ? `${Math.round(details.ai_generated * 100)}%`
                             : '—'}
                         </td>
-                        <td className="px-4 py-3 text-ale-muted tabular-nums text-xs">
+                        <td className="px-4 py-3 text-ale-muted tabular-nums text-xs hidden sm:table-cell">
                           {details.deepfake != null
                             ? `${Math.round(details.deepfake * 100)}%`
                             : '—'}
                         </td>
-                        <td className="px-4 py-3">
+                        <td className="px-4 py-3 hidden md:table-cell">
                           {review ? (
                             <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_COLORS[review.status] ?? ''}`}>
                               {STATUS_LABELS[review.status] ?? review.status}
@@ -233,12 +233,12 @@ export default async function BreweryPage() {
                             <span className="text-ale-muted text-xs">—</span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-ale-muted text-xs max-w-[180px]">
+                        <td className="px-4 py-3 text-ale-muted text-xs max-w-[180px] hidden md:table-cell">
                           {review?.notes
                             ? <span title={review.notes}>{truncate(review.notes, 40)}</span>
                             : '—'}
                         </td>
-                        <td className="px-4 py-3 text-ale-muted text-xs">
+                        <td className="px-4 py-3 text-ale-muted text-xs hidden sm:table-cell">
                           {formatDistanceToNow(new Date(scan.createdAt), { addSuffix: true })}
                         </td>
                       </tr>
