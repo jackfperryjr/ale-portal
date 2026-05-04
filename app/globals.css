@@ -6,3 +6,13 @@ body {
   background-color: #080E12;
   color: #E8DCC8;
 }
+
+@keyframes ale-brew {
+  0%   { transform: rotate(0deg);   filter: drop-shadow(0 0 10px rgba(232, 160, 32, 0.35)); }
+  50%  { transform: rotate(180deg); filter: drop-shadow(0 0 28px rgba(232, 160, 32, 0.95)); }
+  100% { transform: rotate(360deg); filter: drop-shadow(0 0 10px rgba(232, 160, 32, 0.35)); }
+}
+
+.ale-brewing {
+  animation: ale-brew 1.2s linear infinite;
+}
