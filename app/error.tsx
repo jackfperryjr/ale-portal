@@ -3,9 +3,9 @@ import { useEffect } from 'react'
 
 export default function Error({ reset }: { error: Error; reset: () => void }) {
   useEffect(() => {
-    const id = setTimeout(reset, 3000)
+    const id = setTimeout(() => window.location.reload(), 3000)
     return () => clearTimeout(id)
-  }, [reset])
+  }, [])
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center gap-3 text-center px-4">
