@@ -91,8 +91,11 @@ function SignalBar({
 }
 
 function getThumbnailUrl(url: string, videoId: string | null): string | null {
-  if (videoId && url.includes('youtube.com')) {
+  if (videoId && (url.includes('youtube.com') || url.includes('youtu.be'))) {
     return `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
+  }
+  if (/\.(jpe?g|png|gif|webp|avif)(\?|$)/i.test(url)) {
+    return url
   }
   return null
 }
@@ -116,12 +119,12 @@ export default async function ReviewPage({ params }: { params: { id: string } })
   return (
     <div className="min-h-screen bg-ale-bg">
       <header className="border-b border-ale-border bg-ale-card px-6 py-4 flex items-center justify-between">
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <img src="/ale-icon.png" alt="ALE" width={28} height={28} className="rounded"
-            style={{ filter: 'drop-shadow(0 0 6px rgba(232,160,32,0.45))' }} />
+        <Link href="/dashboard" className="flex items-center gap-3">
+          <img src="/ale-icon.png" alt="ALE" width={36} height={36} className="rounded"
+            style={{ filter: 'drop-shadow(0 0 8px rgba(232, 160, 32, 0.5))' }} />
           <div>
-            <span className="font-bold tracking-widest text-ale-amber">ALE</span>
-            <p className="text-xs text-ale-muted italic leading-none">The Brewery</p>
+            <h1 className="text-2xl font-bold tracking-widest text-ale-amber">ALE</h1>
+            <p className="text-xs text-ale-muted italic">The Brewery</p>
           </div>
         </Link>
 

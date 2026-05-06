@@ -118,7 +118,7 @@ export default async function BreweryPage() {
                     <th className="text-left px-4 py-3 w-24">AI Score</th>
                     <th className="text-left px-4 py-3 hidden sm:table-cell">Submitted</th>
                     <th className="text-left px-4 py-3 w-20">Status</th>
-                    <th className="px-4 py-3 w-20"></th>
+                    <th className="px-4 py-3 w-28"></th>
                   </tr>
                 </thead>
                 <tbody>
