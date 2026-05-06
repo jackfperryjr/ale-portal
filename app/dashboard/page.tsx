@@ -76,7 +76,7 @@ export default async function BreweryPage() {
           </div>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-xs text-ale-muted">{session?.user?.email}</span>
+          <span className="hidden sm:inline text-xs text-ale-muted">{session?.user?.email}</span>
           <SignOutButton />
         </div>
       </header>
