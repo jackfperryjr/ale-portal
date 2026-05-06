@@ -12,7 +12,7 @@ export default async function TryPage() {
   return (
     <div className="min-h-screen bg-ale-bg">
       <header className="border-b border-ale-border bg-ale-card px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <Link href="/dashboard" className="flex items-center gap-3">
           <img
             src="/ale-icon.png"
             alt="ALE"
@@ -25,7 +25,7 @@ export default async function TryPage() {
             <h1 className="text-2xl font-bold tracking-widest text-ale-amber">ALE</h1>
             <p className="text-xs text-ale-muted italic">Authenticity Logic Engine</p>
           </div>
-        </div>
+        </Link>
         <div className="flex items-center gap-4">
           <Link href="/scans" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
             Scans →

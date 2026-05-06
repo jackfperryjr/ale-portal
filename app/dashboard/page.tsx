@@ -61,7 +61,7 @@ export default async function BreweryPage() {
   return (
     <div className="min-h-screen bg-ale-bg">
       <header className="border-b border-ale-border bg-ale-card px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <Link href="/dashboard" className="flex items-center gap-3">
           <img
             src="/ale-icon.png"
             alt="ALE"
@@ -74,7 +74,7 @@ export default async function BreweryPage() {
             <h1 className="text-2xl font-bold tracking-widest text-ale-amber">ALE</h1>
             <p className="text-xs text-ale-muted italic">The Brewery</p>
           </div>
-        </div>
+        </Link>
         <div className="flex items-center gap-4">
           <span className="hidden sm:inline text-xs text-ale-muted">{session?.user?.email}</span>
           <SignOutButton />
@@ -152,7 +152,7 @@ export default async function BreweryPage() {
                       <td className="px-4 py-3 text-right">
                         <Link
                           href={`/review/${item.id}`}
-                          className="text-xs px-3 py-1 border border-ale-border rounded hover:border-ale-amber text-ale-muted hover:text-ale-amber transition-colors"
+                          className="whitespace-nowrap text-xs px-3 py-1 border border-ale-border rounded hover:border-ale-amber text-ale-muted hover:text-ale-amber transition-colors"
                         >
                           Details →
                         </Link>
