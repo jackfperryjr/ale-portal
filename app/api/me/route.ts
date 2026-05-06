@@ -9,7 +9,7 @@ export async function GET() {
   if (!session?.user?.email) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
 
   const res = await fetch(
-    `${API_URL}/me?session_id=${encodeURIComponent(session.user.email)}`,
+    `${API_URL}/me?email=${encodeURIComponent(session.user.email)}`,
     { cache: 'no-store' },
   )
   const data = await res.json()

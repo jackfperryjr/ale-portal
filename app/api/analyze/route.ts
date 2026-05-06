@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   const res = await fetch(`${API_URL}/analyze`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ url, session_id: session.user?.email }),
+    body: JSON.stringify({ url, portal_email: session.user?.email }),
   })
 
   const data = await res.json()
