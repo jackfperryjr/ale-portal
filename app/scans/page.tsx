@@ -65,7 +65,7 @@ export default async function ScansPage() {
             rel="noopener"
             className="text-xs text-ale-muted italic hover:text-ale-amber transition-colors"
           >
-            Buy us a round ☕
+            Buy us a round 🍺
           </a>
         </div>
       </header>
