@@ -1,12 +1,14 @@
 import { NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 
-// Comma-separated list of Google emails allowed into the Brewery.
-// Set BREWERY_ALLOWED_EMAILS=you@gmail.com in portal/.env
 const ALLOWED = (process.env.BREWERY_ALLOWED_EMAILS ?? '')
   .split(',')
   .map((e) => e.trim().toLowerCase())
   .filter(Boolean)
+
+export function isBrewmaster(email: string | null | undefined): boolean {
+  return ALLOWED.includes((email ?? '').toLowerCase())
+}
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -16,9 +18,8 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    signIn({ user }) {
-      const email = user.email?.toLowerCase() ?? ''
-      return ALLOWED.includes(email)
+    signIn() {
+      return true  // any Google account can authenticate; page-level guards handle roles
     },
   },
   pages: {

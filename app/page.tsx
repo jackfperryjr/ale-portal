@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { authOptions, isBrewmaster } from '@/lib/auth'
 import { getQueue, getAnalyses, getStats } from '@/lib/api'
 import { formatDistanceToNow } from 'date-fns'
 import Link from 'next/link'
@@ -46,6 +46,7 @@ function truncate(url: string, n = 52) {
 export default async function BreweryPage() {
   const session = await getServerSession(authOptions)
   if (!session && process.env.SKIP_AUTH !== 'true') redirect('/login')
+  if (session && !isBrewmaster(session.user?.email) && process.env.SKIP_AUTH !== 'true') redirect('/try')
 
   const [pending, reviewing, recentScans, stats] = await Promise.all([
     getQueue('pending'),

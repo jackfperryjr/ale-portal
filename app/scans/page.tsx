@@ -55,6 +55,19 @@ export default async function ScansPage() {
             <p className="text-xs text-ale-muted italic">Authenticity Logic Engine</p>
           </div>
         </div>
+        <div className="flex items-center gap-4">
+          <Link href="/try" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
+            Try ALE →
+          </Link>
+          <a
+            href="https://buy.stripe.com/aFafZj7YI6n06d3fxG0Fi00"
+            target="_blank"
+            rel="noopener"
+            className="text-xs text-ale-muted italic hover:text-ale-amber transition-colors"
+          >
+            Buy us a round ☕
+          </a>
+        </div>
       </header>
 
       <main className="max-w-5xl mx-auto px-6 py-8 space-y-6">
