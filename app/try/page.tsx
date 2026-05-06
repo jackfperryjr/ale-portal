@@ -7,7 +7,7 @@ import TryForm from './TryForm'
 
 export default async function TryPage() {
   const session = await getServerSession(authOptions)
-  if (!session) redirect('/login')
+  if (!session) redirect('/login?callbackUrl=/try')
 
   return (
     <div className="min-h-screen bg-ale-bg">
