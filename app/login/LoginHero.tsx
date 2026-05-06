@@ -2,12 +2,12 @@
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
 
-export default function LoginHero({ error }: { error?: string }) {
+export default function LoginHero({ error, callbackUrl = '/scans' }: { error?: string; callbackUrl?: string }) {
   const [brewing, setBrewing] = useState(false)
 
   function handleSignIn() {
     setBrewing(true)
-    signIn('google', { callbackUrl: '/' })
+    signIn('google', { callbackUrl })
   }
 
   return (

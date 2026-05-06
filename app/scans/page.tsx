@@ -86,12 +86,12 @@ export default async function ScansPage() {
           </div>
         ) : (
           <div className="bg-ale-card border border-ale-border rounded-lg overflow-hidden">
-            <table className="w-full text-sm">
+            <table className="w-full text-sm table-fixed">
               <thead>
                 <tr className="border-b border-ale-border text-ale-muted text-xs uppercase tracking-wider">
                   <th className="px-4 py-3 w-10"></th>
                   <th className="text-left px-4 py-3">URL</th>
-                  <th className="text-left px-4 py-3">Score</th>
+                  <th className="text-left px-4 py-3 w-28">Score</th>
                   <th className="text-left px-4 py-3 hidden sm:table-cell">AI</th>
                   <th className="text-left px-4 py-3 hidden sm:table-cell">Deepfake</th>
                   <th className="text-left px-4 py-3 hidden md:table-cell">Verification</th>
@@ -108,12 +108,12 @@ export default async function ScansPage() {
                       <td className="px-4 py-3">
                         <Thumbnail url={scan.url} videoId={scan.videoId} />
                       </td>
-                      <td className="px-4 py-3 max-w-xs">
+                      <td className="px-4 py-3 max-w-xs overflow-hidden">
                         <a
                           href={scan.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-ale-amber hover:text-ale-gold underline underline-offset-2"
+                          className="block truncate text-ale-amber hover:text-ale-gold underline underline-offset-2"
                           title={scan.url}
                         >
                           {truncate(scan.url)}

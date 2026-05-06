@@ -126,7 +126,7 @@ export default async function ReviewPage({ params }: { params: { id: string } })
         </div>
 
         <div className="flex items-center gap-3">
-          <Link href="/" className="text-ale-muted hover:text-ale-amber transition-colors text-sm">
+          <Link href="/dashboard" className="text-ale-muted hover:text-ale-amber transition-colors text-sm">
             ← Queue
           </Link>
           <div className="h-4 w-px bg-ale-border" />
@@ -134,7 +134,7 @@ export default async function ReviewPage({ params }: { params: { id: string } })
         </div>
 
         <div className="flex items-center gap-4">
-          <span className="text-xs text-ale-muted">{session?.user?.email}</span>
+          <span className="hidden sm:inline text-xs text-ale-muted">{session?.user?.email}</span>
           <SignOutButton />
         </div>
       </header>

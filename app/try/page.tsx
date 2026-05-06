@@ -7,7 +7,7 @@ import TryForm from './TryForm'
 
 export default async function TryPage() {
   const session = await getServerSession(authOptions)
-  if (!session) redirect('/login')
+  if (!session) redirect('/login?callbackUrl=/try')
 
   return (
     <div className="min-h-screen bg-ale-bg">
@@ -30,7 +30,7 @@ export default async function TryPage() {
           <Link href="/scans" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
             Scans →
           </Link>
-          <span className="text-xs text-ale-muted">{session.user?.email}</span>
+          <span className="hidden sm:inline text-xs text-ale-muted">{session.user?.email}</span>
           <SignOutButton />
         </div>
       </header>
