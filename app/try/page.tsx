@@ -30,6 +30,9 @@ export default async function TryPage() {
           <Link href="/scans" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
             Scans →
           </Link>
+          <Link href="/metrics" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
+            Metrics →
+          </Link>
           <span className="hidden sm:inline text-xs text-ale-muted">{session.user?.email}</span>
           <SignOutButton />
         </div>
