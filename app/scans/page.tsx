@@ -56,6 +56,9 @@ export default async function ScansPage() {
           </div>
         </Link>
         <div className="flex items-center gap-4">
+          <Link href="/metrics" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
+            Metrics →
+          </Link>
           <Link href="/try" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
             Try ALE →
           </Link>
