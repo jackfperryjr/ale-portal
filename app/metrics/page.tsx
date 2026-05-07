@@ -6,11 +6,12 @@ const PLATFORM_MAP: Record<string, string> = {
   'youtu.be': 'YouTube',        'm.youtube.com': 'YouTube',
   'x.com': 'X',                 'www.x.com': 'X',
   'twitter.com': 'X',           'www.twitter.com': 'X',
+  'pbs.twimg.com': 'X',         'video.twimg.com': 'X',
   'www.tiktok.com': 'TikTok',   'tiktok.com': 'TikTok',
   'www.instagram.com': 'Instagram',
   'www.facebook.com': 'Facebook', 'facebook.com': 'Facebook', 'fb.com': 'Facebook',
   'www.reddit.com': 'Reddit',   'reddit.com': 'Reddit',
-  'www.linkedin.com': 'LinkedIn',
+  'www.linkedin.com': 'LinkedIn', 'media.licdn.com': 'LinkedIn',
 }
 
 function getPlatform(url: string): string {
@@ -57,7 +58,11 @@ export default async function MetricsPage() {
     else if (s.realityScore! >= 40) platMap[p].mixed++
     else                            platMap[p].synthetic++
   }
-  const platforms = Object.entries(platMap).sort((a, b) => b[1].total - a[1].total)
+  const platforms = Object.entries(platMap).sort(([a], [b]) => {
+    if (a === 'Other') return 1
+    if (b === 'Other') return -1
+    return a.localeCompare(b)
+  })
 
   // ── Score histogram (10pt buckets) ──────────────────────────────────────────
   const buckets = Array.from({ length: 10 }, (_, i) => {
@@ -108,6 +113,10 @@ export default async function MetricsPage() {
           <Link href="/try" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
             Try ALE →
           </Link>
+          <a href="https://buy.stripe.com/aFafZj7YI6n06d3fxG0Fi00" target="_blank" rel="noopener"
+            className="text-xs italic text-ale-muted hover:text-ale-amber transition-colors">
+            Buy us a round 🍺
+          </a>
         </div>
       </header>
 
