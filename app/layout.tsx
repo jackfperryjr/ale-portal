@@ -10,7 +10,7 @@ const API_URL = process.env.ALE_API_URL ?? 'http://localhost:8000'
 
 async function getSystemStatus(): Promise<string | null> {
   try {
-    const res = await fetch(`${API_URL}/status`, { next: { revalidate: 60 } })
+    const res = await fetch(`${API_URL}/status`, { cache: 'no-store' })
     if (!res.ok) return null
     const data = await res.json()
     return data.active ? data.message : null
