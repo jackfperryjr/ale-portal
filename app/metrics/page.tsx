@@ -85,6 +85,23 @@ export default async function MetricsPage() {
   }))
   const maxDaily = Math.max(...daily.map(d => d.count), 1)
 
+  // ── Content type breakdown ──────────────────────────────────────────────────
+  const videoScans = scans.filter(s => s.contentType === 'video').length
+  const imageScans = scans.filter(s => s.contentType === 'image').length
+  const disagreeCount = scans.filter(s => s.userDisagreed).length
+
+  // ── Trigger breakdown ───────────────────────────────────────────────────────
+  const triggerLabels: Record<string, string> = {
+    cap_click: 'Video Cap',
+    image_hover: 'Image Hover',
+    manual_url: 'Manual URL',
+  }
+  const triggerCounts = ['cap_click', 'image_hover', 'manual_url'].map(t => ({
+    key: t,
+    label: triggerLabels[t],
+    count: scans.filter(s => s.trigger === t).length,
+  })).filter(t => t.count > 0)
+
   // ── Hive signal averages ────────────────────────────────────────────────────
   const withAI       = scans.filter(s => s.rawResult?.details?.ai_generated != null)
   const withDeepfake = scans.filter(s => s.rawResult?.details?.deepfake != null)
@@ -143,6 +160,16 @@ export default async function MetricsPage() {
             sub={`${pct(humanReviewed, scans.length)}% of scans`} color="text-emerald-300" />
         </div>
 
+        {/* ── Content type & disagree ── */}
+        <div className="grid grid-cols-3 gap-4">
+          <StatCard label="Video Scans" value={videoScans}
+            sub={`${pct(videoScans, scans.length)}% of total`} color="text-ale-amber" />
+          <StatCard label="Image Scans" value={imageScans}
+            sub={`${pct(imageScans, scans.length)}% of total`} color="text-ale-amber" />
+          <StatCard label="Disagreements" value={disagreeCount}
+            sub={`${pct(disagreeCount, scans.length)}% of scans`} color="text-rose-400" />
+        </div>
+
         {/* ── Platform breakdown ── */}
         <section className="space-y-3">
           <h3 className="text-sm font-bold text-ale-amber uppercase tracking-wider">By Platform</h3>
@@ -195,7 +222,7 @@ export default async function MetricsPage() {
           </div>
         </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
 
           {/* ── Score histogram ── */}
           <section className="space-y-3">
@@ -246,6 +273,32 @@ export default async function MetricsPage() {
               })}
               <p className="text-xs text-ale-muted italic pt-1">
                 Averaged across {withAI.length} scored items.
+              </p>
+            </div>
+          </section>
+
+          {/* ── Trigger breakdown ── */}
+          <section className="space-y-3">
+            <h3 className="text-sm font-bold text-ale-amber uppercase tracking-wider">By Trigger</h3>
+            <div className="bg-ale-card border border-ale-border rounded-lg p-5 space-y-5">
+              {triggerCounts.length === 0 ? (
+                <p className="text-xs text-ale-muted italic">No trigger data yet.</p>
+              ) : triggerCounts.map(({ key, label, count }) => {
+                const p = pct(count, scans.length)
+                return (
+                  <div key={key} className="space-y-1.5">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-ale-muted">{label}</span>
+                      <span className="font-bold tabular-nums text-ale-amber">{count} ({p}%)</span>
+                    </div>
+                    <div className="h-1.5 bg-ale-border rounded-full overflow-hidden">
+                      <div className="h-full rounded-full" style={{ width: `${p}%`, background: '#E8A020' }} />
+                    </div>
+                  </div>
+                )
+              })}
+              <p className="text-xs text-ale-muted italic pt-1">
+                How users initiated each scan.
               </p>
             </div>
           </section>
