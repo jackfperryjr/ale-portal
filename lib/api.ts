@@ -13,6 +13,9 @@ export interface Analysis {
   realityScore: number | null
   label: string | null
   rawResult: { details?: Record<string, number> } | null
+  contentType: string | null
+  trigger: string | null
+  userDisagreed: boolean
   createdAt: string
   review: {
     status: string
@@ -66,6 +69,9 @@ function toAnalysis(r: any): Analysis {
     realityScore: r.reality_score,
     label: r.label,
     rawResult: r.raw_result,
+    contentType: r.content_type ?? null,
+    trigger: r.trigger ?? null,
+    userDisagreed: r.user_disagreed ?? false,
     createdAt: r.created_at,
     review: r.review
       ? { status: r.review.status, notes: r.review.notes, updatedAt: r.review.updated_at }
