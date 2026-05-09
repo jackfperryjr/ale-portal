@@ -1,5 +1,6 @@
-import { getAnalyses } from '@/lib/api'
+import { getAnalyses, getApiErrors } from '@/lib/api'
 import Link from 'next/link'
+import ApiHealthCard from '../components/ApiHealthCard'
 
 const PLATFORM_MAP: Record<string, string> = {
   'www.youtube.com': 'YouTube', 'youtube.com': 'YouTube',
@@ -36,7 +37,7 @@ function StatCard({ label, value, sub, color = 'text-ale-amber' }: {
 }
 
 export default async function MetricsPage() {
-  const scans = await getAnalyses(2000)
+  const [scans, apiErrors] = await Promise.all([getAnalyses(2000), getApiErrors(24)])
 
   const scored    = scans.filter(s => s.realityScore !== null)
   const genuine   = scored.filter(s => s.realityScore! >= 70)
@@ -111,6 +112,15 @@ export default async function MetricsPage() {
   const avgAI       = avg(withAI, 'ai_generated')
   const avgDeepfake = avg(withDeepfake, 'deepfake')
   const avgNotAI    = avg(withNotAI, 'not_ai_generated')
+
+  // ── API error stats ─────────────────────────────────────────────────────────
+  const errors429   = apiErrors.filter(e => e.statusCode === 429)
+  const last429     = errors429[0] ?? null
+  const hourAgo     = new Date(Date.now() - 60 * 60 * 1000).toISOString()
+  const count429h   = errors429.filter(e => e.createdAt >= hourAgo).length
+  const statusBreakdown = Object.entries(
+    apiErrors.reduce((acc, e) => { acc[e.statusCode] = (acc[e.statusCode] ?? 0) + 1; return acc }, {} as Record<number, number>)
+  ).map(([code, count]) => ({ code: Number(code), count })).sort((a, b) => b.count - a.count)
 
   return (
     <div className="min-h-screen bg-ale-bg">
@@ -304,6 +314,18 @@ export default async function MetricsPage() {
           </section>
 
         </div>
+
+        {/* ── API health ── */}
+        <section className="space-y-3">
+          <h3 className="text-sm font-bold text-ale-amber uppercase tracking-wider">API Health (24h)</h3>
+          <ApiHealthCard
+            last429At={last429?.createdAt ?? null}
+            retryAfterSeconds={last429?.retryAfter ?? null}
+            count24h={errors429.length}
+            countHour={count429h}
+            statusBreakdown={statusBreakdown}
+          />
+        </section>
 
         {/* ── 14-day trend ── */}
         <section className="space-y-3">

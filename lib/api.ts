@@ -39,6 +39,14 @@ export interface QueueItem {
   } | null
 }
 
+export interface ApiError {
+  id: string
+  provider: string
+  statusCode: number
+  retryAfter: number | null
+  createdAt: string
+}
+
 export interface Stats {
   queuePending: number
   queueVerified: number
@@ -107,6 +115,18 @@ export async function getStats(): Promise<Stats> {
     queueVerified: r.queue_verified,
     totalAnalyses: r.total_analyses,
   }
+}
+
+export async function getApiErrors(hours = 24): Promise<ApiError[]> {
+  const res = await fetch(`${API_URL}/api-errors?hours=${hours}`, { cache: 'no-store', headers: headers() })
+  if (!res.ok) throw new Error(`GET /api-errors → ${res.status}`)
+  return (await res.json()).map((e: any) => ({
+    id: e.id,
+    provider: e.provider,
+    statusCode: e.status_code,
+    retryAfter: e.retry_after ?? null,
+    createdAt: e.created_at,
+  }))
 }
 
 export async function patchQueueItem(id: string, status: string, notes?: string): Promise<void> {
