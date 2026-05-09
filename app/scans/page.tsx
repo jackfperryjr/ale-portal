@@ -47,7 +47,6 @@ export default async function ScansPage() {
             alt="ALE"
             width={36}
             height={36}
-            className="rounded"
             style={{ filter: 'drop-shadow(0 0 8px rgba(232, 160, 32, 0.5))' }}
           />
           <div>

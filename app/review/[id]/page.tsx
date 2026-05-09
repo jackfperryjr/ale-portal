@@ -120,7 +120,7 @@ export default async function ReviewPage({ params }: { params: { id: string } })
     <div className="min-h-screen bg-ale-bg">
       <header className="border-b border-ale-border bg-ale-card px-6 py-4 flex items-center justify-between">
         <Link href="/dashboard" className="flex items-center gap-3">
-          <img src="/ale-icon.png" alt="ALE" width={36} height={36} className="rounded"
+          <img src="/ale-icon.png" alt="ALE" width={36} height={36}
             style={{ filter: 'drop-shadow(0 0 8px rgba(232, 160, 32, 0.5))' }} />
           <div>
             <h1 className="text-2xl font-bold tracking-widest text-ale-amber">ALE</h1>
