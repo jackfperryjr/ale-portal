@@ -18,7 +18,7 @@ export default function LoginHero({ error, callbackUrl = '/scans' }: { error?: s
           alt="ALE"
           width={98}
           height={98}
-          className={`rounded ${brewing ? 'ale-brewing' : ''}`}
+          className={brewing ? 'ale-brewing' : undefined}
           style={brewing ? undefined : { filter: 'drop-shadow(0 0 8px rgba(232, 160, 32, 0.5))' }}
         />
         <h1 className="text-5xl font-bold tracking-widest text-ale-amber">ALE</h1>
