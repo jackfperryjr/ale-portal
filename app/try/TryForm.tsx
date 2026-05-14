@@ -1,7 +1,8 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 interface Result {
+  id: string
   reality_score: number
   label: string
   cached: boolean
@@ -42,13 +43,19 @@ function ScoreRing({ score }: { score: number }) {
   )
 }
 
-export default function TryForm() {
-  const [url, setUrl] = useState('')
+interface TryFormProps {
+  initialUrl?: string
+}
+
+export default function TryForm({ initialUrl }: TryFormProps) {
+  const [url, setUrl] = useState(initialUrl ?? '')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<Result | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [dailyCredits, setDailyCredits] = useState<number | null>(null)
   const [paidCredits, setPaidCredits] = useState<number | null>(null)
+  const [reviewState, setReviewState] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
+  const didAutoSubmit = useRef(false)
 
   useEffect(() => {
     fetch('/api/me')
@@ -59,17 +66,25 @@ export default function TryForm() {
       .catch(() => {})
   }, [])
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!url.trim()) return
+  useEffect(() => {
+    if (initialUrl && !didAutoSubmit.current) {
+      didAutoSubmit.current = true
+      submit(initialUrl)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialUrl])
+
+  async function submit(targetUrl: string) {
+    if (!targetUrl.trim()) return
     setLoading(true)
     setResult(null)
     setError(null)
+    setReviewState('idle')
     try {
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: url.trim() }),
+        body: JSON.stringify({ url: targetUrl.trim() }),
       })
       const data = await res.json()
       if (!res.ok) {
@@ -83,6 +98,30 @@ export default function TryForm() {
       setError('Could not reach the API.')
     } finally {
       setLoading(false)
+    }
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    submit(url)
+  }
+
+  async function requestHumanReview() {
+    if (!result) return
+    setReviewState('loading')
+    try {
+      const res = await fetch('/api/brewmaster', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, analysis_id: result.id }),
+      })
+      if (res.ok) {
+        setReviewState('done')
+      } else {
+        setReviewState('error')
+      }
+    } catch {
+      setReviewState('error')
     }
   }
 
@@ -180,6 +219,28 @@ export default function TryForm() {
             )}
             {result.cached && (
               <p className="text-xs text-ale-muted italic">Cached result</p>
+            )}
+
+            {result.reality_score < 85 && (
+              <div className="pt-1">
+                {reviewState === 'idle' && (
+                  <button
+                    onClick={requestHumanReview}
+                    className="text-xs text-ale-muted hover:text-ale-amber underline underline-offset-2 transition-colors italic"
+                  >
+                    Request human verification
+                  </button>
+                )}
+                {reviewState === 'loading' && (
+                  <span className="text-xs text-ale-muted italic">Queuing…</span>
+                )}
+                {reviewState === 'done' && (
+                  <span className="text-xs text-emerald-400 italic">Queued for human review</span>
+                )}
+                {reviewState === 'error' && (
+                  <span className="text-xs text-ale-skunked italic">Could not queue — try again</span>
+                )}
+              </div>
             )}
           </div>
         </div>
