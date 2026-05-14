@@ -1,0 +1,19 @@
+{
+  "name": "ALE — Authenticity Logic Engine",
+  "short_name": "ALE",
+  "description": "Detect AI-generated images and deepfake videos.",
+  "start_url": "/try",
+  "display": "standalone",
+  "background_color": "#080E12",
+  "theme_color": "#E8A020",
+  "icons": [
+    { "src": "/ale-icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "share_target": {
+    "action": "/try",
+    "method": "GET",
+    "params": {
+      "url": "url"
+    }
+  }
+}

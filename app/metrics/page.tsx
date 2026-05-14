@@ -1,6 +1,6 @@
 import { getAnalyses, getApiErrors } from '@/lib/api'
-import Link from 'next/link'
 import ApiHealthCard from '../components/ApiHealthCard'
+import AppHeader from '../components/AppHeader'
 
 const PLATFORM_MAP: Record<string, string> = {
   'www.youtube.com': 'YouTube', 'youtube.com': 'YouTube',
@@ -124,28 +124,7 @@ export default async function MetricsPage() {
 
   return (
     <div className="min-h-screen bg-ale-bg">
-      <header className="border-b border-ale-border bg-ale-card px-6 py-4 flex items-center justify-between">
-        <Link href="/dashboard" className="flex items-center gap-3">
-          <img src="/ale-icon.png" alt="ALE" width={36} height={36}
-            style={{ filter: 'drop-shadow(0 0 8px rgba(232, 160, 32, 0.5))' }} />
-          <div>
-            <h1 className="text-2xl font-bold tracking-widest text-ale-amber">ALE</h1>
-            <p className="text-xs text-ale-muted italic">Authenticity Logic Engine</p>
-          </div>
-        </Link>
-        <div className="flex items-center gap-4">
-          <Link href="/scans" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
-            Scans →
-          </Link>
-          <Link href="/try" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
-            Try ALE →
-          </Link>
-          <a href="https://buy.stripe.com/aFafZj7YI6n06d3fxG0Fi00" target="_blank" rel="noopener"
-            className="text-xs italic text-ale-muted hover:text-ale-amber transition-colors">
-            Buy us a round 🍺
-          </a>
-        </div>
-      </header>
+      <AppHeader />
 
       <main className="max-w-5xl mx-auto px-6 py-8 space-y-10">
 

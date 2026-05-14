@@ -1,7 +1,7 @@
 import { getAnalyses } from '@/lib/api'
 import { formatDistanceToNow } from 'date-fns'
-import Link from 'next/link'
 import Thumbnail from '@/app/components/Thumbnail'
+import AppHeader from '@/app/components/AppHeader'
 
 const STATUS_COLORS: Record<string, string> = {
   verified: 'bg-emerald-900/40 text-emerald-300',
@@ -40,37 +40,7 @@ export default async function ScansPage() {
 
   return (
     <div className="min-h-screen bg-ale-bg">
-      <header className="border-b border-ale-border bg-ale-card px-6 py-4 flex items-center justify-between">
-        <Link href="/dashboard" className="flex items-center gap-3">
-          <img
-            src="/ale-icon.png"
-            alt="ALE"
-            width={36}
-            height={36}
-            style={{ filter: 'drop-shadow(0 0 8px rgba(232, 160, 32, 0.5))' }}
-          />
-          <div>
-            <h1 className="text-2xl font-bold tracking-widest text-ale-amber">ALE</h1>
-            <p className="text-xs text-ale-muted italic">Authenticity Logic Engine</p>
-          </div>
-        </Link>
-        <div className="flex items-center gap-4">
-          <Link href="/metrics" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
-            Metrics →
-          </Link>
-          <Link href="/try" className="text-xs text-ale-muted hover:text-ale-amber transition-colors">
-            Try ALE →
-          </Link>
-          <a
-            href="https://buy.stripe.com/aFafZj7YI6n06d3fxG0Fi00"
-            target="_blank"
-            rel="noopener"
-            className="text-xs text-ale-muted italic hover:text-ale-amber transition-colors"
-          >
-            Buy us a round 🍺
-          </a>
-        </div>
-      </header>
+      <AppHeader />
 
       <main className="max-w-5xl mx-auto px-6 py-8 space-y-6">
         <div>
